@@ -1,93 +1,114 @@
 //DinnerModel class
 class DinnerModel {
-
   constructor() {
     this.dishes = dishesConst;
-
+	this.dinner = {guests:0, menu:[]};
     //TODO Lab 0
     // implement the data structure that will hold number of guests
     // and selected dishes for the dinner menu
-
+	
   }
 
   setNumberOfGuests(num) {
     //TODO Lab 0
+	if(num >= 0){
+		this.dinner.guests = num;
+	}
   }
 
   getNumberOfGuests() {
     //TODO Lab 0
+	return this.dinner.guests;
   }
 
   //Returns the dish that is on the menu for selected type 
   getSelectedDish(type) {
     //TODO Lab 0
+		for(let dish of this.dinner.menu){
+			if (dish.type === type){
+				return dish;
+			}
+		}
+	return undefined;
   }
 
   //Returns all the dishes on the menu.
   getFullMenu() {
-    //TODO Lab 0
+	return this.dinner.menu;  
   }
-
   //Returns all ingredients for all the dishes on the menu.
   getAllIngredients() {
     //TODO Lab 0
-  }
+	let y = {};
+	for(let x of menu.dishes){
+		for(let z of x.ingredients){
+			y += z;
+		}
+	}
+	return y;
+	}
+	//Returns the total price of the menu (all the ingredients multiplied by number of guests).
+	getTotalMenuPrice() {
+	//TODO Lab 0
+	}
 
-  //Returns the total price of the menu (all the ingredients multiplied by number of guests).
-  getTotalMenuPrice() {
-    //TODO Lab 0
-  }
+	//Adds the passed dish to the menu. If the dish of that type already exists on the menu
+	//it is removed from the menu and the new one added.
+	addDishToMenu(id) {
+	//TODO Lab 0 
+	if(!(this.getSelectedDish(this.getDish(id).type) === undefined)){
+		this.removeDishFromMenu(this.getSelectedDish(this.getDish(id)));
+	}
+	this.dinner.menu.push(this.getDish(id));
+	}
 
-  //Adds the passed dish to the menu. If the dish of that type already exists on the menu
-  //it is removed from the menu and the new one added.
-  addDishToMenu(id) {
-    //TODO Lab 0 
-  }
-
-  //Removes dish from menu
-  removeDishFromMenu(id) {
-    //TODO Lab 0
-  }
+	//Removes dish from menu
+	removeDishFromMenu(id) {
+	//TODO Lab 0
+		this.dinner.menu.splice(this.dinner.menu.indexOf(id));
+	}
 
 
-  //Returns all dishes of specific type (i.e. "starter", "main dish" or "dessert").
-  //query argument, text, if passed only returns dishes that contain the query in name or one of the ingredients.
-  //if you don't pass any query, all the dishes will be returned
-  getAllDishes(type, query) {
-    return this.dishes.filter(function (dish) {
-      let found = true;
-      if (query) {
-        found = false;
-        dish.ingredients.forEach(function (ingredient) {
-          if (ingredient.name.indexOf(query) !== -1) {
-            found = true;
-          }
-        });
-        if (dish.name.indexOf(query) !== -1) {
-          found = true;
-        }
-      }
-      return dish.type === type && found;
-    });
-  }
+	//Returns all dishes of specific type (i.e. "starter", "main dish" or "dessert").
+	//query argument, text, if passed only returns dishes that contain the query in name or one of the ingredients.
+	//if you don't pass any query, all the dishes will be returned
+	getAllDishes(type, query) {
+		if(query === undefined && type === undefined){
+			return this.dishes;
+		}
+		return this.dishes.filter(function (dish) {
+			let found = true;
+			if (query) {
+				found = false;
+				dish.ingredients.forEach(function (ingredient) {
+					if (ingredient.name.indexOf(query) !== -1) {
+						found = true;
+					}
+				});
+				if (dish.name.indexOf(query) !== -1) {
+					found = true;
+				}
+			}
+			return (dish.type === type || type == "") && found;
+		});
+	}
 
   //Returns a dish of specific ID
-  getDish(id) {
-    for (let dsh of this.dishes) {
-      if (dsh.id === id) {
-        return dsh;
-      }
+getDish(id) {
+	for (let dsh of this.dishes) {
+		if (dsh.id === id) {
+			return dsh;
+		}
     }
     return undefined;
   }
 }
-
 // the dishes constant contains an array of all the 
 // dishes in the database. Each dish has id, name, type,
 // image (name of the image file), description and
 // array of ingredients. Each ingredient has name, 
 // quantity (a number), price (a number) and unit (string 
-// defining the unit i.e. "g", "slices", "ml". Unit
+// defining the unit i.e.//// "g", "slices", "ml". Unit
 // can sometimes be empty like in the example of eggs where
 // you just say "5 eggs" and not "5 pieces of eggs" or anything else.
 const dishesConst = [{
@@ -347,6 +368,5 @@ function deepFreeze(o) {
     }
   });
 }
-
 deepFreeze(dishesConst);
 
